@@ -42,6 +42,9 @@ on early-fs
     mount_all /fstab.qcom
     swapon_all /fstab.qcom
 
+    insmod /sbin/qcrypto_module.ko
+    insmod /sbin/qdrbg_module.ko
+
 on init
     chmod 0644 /proc/cmdline
 
@@ -72,9 +75,15 @@ on init
     chmod 0660 /sys/bus/spi/devices/spi12.0/clk_enable
     chown system system /sys/bus/spi/devices/spi12.0/clk_enable
 
+on early-boot
+    # set RLIMIT_MEMLOCK to 64MB
+    setrlimit 8 67108864 67108864
+
     # Laser AF
     chown system system /dev/stmvl6180_ranging
     symlink /dev/input/event2 /dev/stm_sensor
+    chown system system /system/bin/laser_init
+    chmod 0750 /system/bin/laser_init
 
     # Leds permission
     chown system system /sys/class/leds/led:flash_0/brightness
@@ -434,6 +443,26 @@ on post-fs-data
     # Create directory used by display clients
     mkdir /data/misc/display 0770 system graphics
     mkdir /persist/display 0770 system graphics
+
+    # RIDL data
+    mkdir /data/misc/SelfHost/ 0710 system shell
+    mkdir /data/misc/SelfHost/QCLogs/ 2750 system shell
+    mkdir /data/misc/SelfHost/QCLogs/temp/ 0700 system shell
+    mkdir /data/misc/SelfHost/storage/ 0700 system shell
+    mkdir /data/misc/SelfHost/Running/ 2750 system shell
+    mkdir /data/misc/SelfHost/socket/ 2770 system system
+
+    write /data/misc/radio/copy_complete 0
+    chown radio radio /data/misc/radio/copy_complete
+    chmod 0660 /data/misc/radio/copy_complete
+
+    # File flags for prebuilt ril db file
+    write /data/misc/radio/prebuilt_db_support 1
+    chown radio radio /data/misc/radio/prebuilt_db_support
+    chmod 0400 /data/misc/radio/prebuilt_db_support
+    write /data/misc/radio/db_check_done 0
+    chown radio radio /data/misc/radio/db_check_done
+    chmod 0660 /data/misc/radio/db_check_done
 
     # Mounting of persist is moved to 'on emmc-fs' and 'on fs' sections
     # We chown/chmod /persist again so because mount is run as root + defaults
