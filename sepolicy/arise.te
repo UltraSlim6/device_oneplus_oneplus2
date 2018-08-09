@@ -1,0 +1,4 @@
+allow mediaserver mediaserver_tmpfs:file { read write execute };
+allow system_app default_android_service:service_manager { find };
+allow system_app init:unix_stream_socket { connectto };
+allow system_app property_socket:sock_file { getattr open read write execute };
