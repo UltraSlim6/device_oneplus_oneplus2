@@ -262,9 +262,6 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/wifi/WCNSS_cfg.dat:system/etc/firmware/wlan/qca_cld/WCNSS_cfg.dat \
     $(LOCAL_PATH)/wifi/WCNSS_qcom_wlan_nv.bin:system/etc/firmware/wlan/qca_cld/WCNSS_qcom_wlan_nv.bin
 
-PRODUCT_PROPERTY_OVERRIDES += \
-     ro.slim.build.vendor_security_patch=2018-05-05
-
 PRODUCT_PACKAGES += \
     ipacm \
     ipacm-diag \
