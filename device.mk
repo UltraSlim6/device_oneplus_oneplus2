@@ -232,7 +232,7 @@ PRODUCT_PACKAGES += \
 
 # Sensors
 PRODUCT_PACKAGES += \
-    sensors.msm8994
+    sensors.msm8994 \
     sensors.ssc.wrapper
 
 PRODUCT_COPY_FILES += \
